@@ -1,10 +1,10 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { NavBar } from './components/nav-bar/NavBar';
-import { AddContact } from './components/cotacts/add-contact/AddContact';
-import { ViewContact } from './components/cotacts/view-contact/ViewContact';
-import { EditContact } from './components/cotacts/edit-contact/EditContact';
-import { ContactList } from './components/cotacts/contact-list/ContactList';
+import { AddContact } from './page/cotacts/add-contact/AddContact';
+import { ViewContact } from './page/cotacts/view-contact/ViewContact';
+import { EditContact } from './page/cotacts/edit-contact/EditContact';
+import { ContactList } from './page/cotacts/contact-list/ContactList';
 import './App.css';
 import { NotFound } from './page/not-found/NotFound';
 
