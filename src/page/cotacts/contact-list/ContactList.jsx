@@ -1,35 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { apiRequest } from '../../../api/api';
-import { ListItem } from '../../../components/list-item/ListItem';
+import { ContactItem } from '../../../components/contact-item/ContactItem';
 import { Search } from '../../../components/search/Search';
+import { Spinner } from '../../../components/spinner/Spinner';
 
 export const ContactList = () => {
   const [state, setState] = useState({
-    loading: false,
+    loading: true,
     contacts: [],
     errorMessage: '',
   });
 
-  const getContact = async () => {
-    let response = await apiRequest({
-      url: '/contacts',
-    });
-    setState({
-      loading: true,
-      contacts: response,
-      errorMessage: '',
-    });
+  const getContacts = async () => {
+    try {
+      // setState({ ...state, loading: true });
+      let response = await apiRequest({
+        url: '/contacts',
+      });
+      setState({
+        ...state,
+        loading: false,
+        contacts: response,
+      });
+    } catch (error) {
+      setState({
+        ...state,
+        loading: false,
+        errorMessage: error.message,
+      });
+    }
   };
 
   useEffect(() => {
-    try {
-      getContact();
-    } catch (error) {
-      console.log(error);
-    }
+    getContacts();
   }, []);
-  console.log(state);
+
+  let { loading, contacts, errorMessage } = state;
   return (
     <>
       <section className='contact-search p-5'>
@@ -52,11 +59,7 @@ export const ContactList = () => {
       </section>
       <section className='contact-list'>
         <div className='container'>
-          <div className='row'>
-            {state?.contacts?.map((contact) => (
-              <ListItem key={contact.id} contact={contact} />
-            ))}
-          </div>
+          <div className='row'>{loading ? <Spinner /> : contacts.length > 0 && contacts.map((contact) => <ContactItem key={contact.id} contact={contact} />)}</div>
         </div>
       </section>
     </>

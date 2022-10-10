@@ -1,8 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { apiRequest } from '../../../api/api';
+import { Spinner } from '../../../components/spinner/Spinner';
+import { ViewContactItem } from '../../../components/view-contact-item/ViewContactItem';
 
 export const ViewContact = () => {
   const { contactId } = useParams();
+  const [state, setState] = useState({
+    loading: true,
+    contact: [],
+    errorMessage: '',
+  });
+
+  const getContact = async () => {
+    try {
+      // setState({ ...state, loading: true });
+      let response = await apiRequest({
+        url: `/contacts/${contactId}`,
+      });
+      setState({
+        ...state,
+        loading: false,
+        contact: response,
+      });
+    } catch (error) {
+      setState({
+        ...state,
+        loading: false,
+        errorMessage: error.message,
+      });
+    }
+  };
+
+  useEffect(() => {
+    getContact();
+  }, []);
+
+  let { loading, contact, errorMessage } = state;
+
   return (
     <>
       <section className='view-contact-intro p-3'>
@@ -18,44 +53,7 @@ export const ViewContact = () => {
           </div>
         </div>
       </section>
-      <section className='view-contact mt-3'>
-        <div className='container'>
-          <div className='row align-items-center'>
-            <div className='col-md-4'>
-              <img src='https://cdn-icons-png.flaticon.com/512/219/219988.png' alt='default' className='contact-img' />
-            </div>
-            <div className='col-md-8'>
-              <ul className='list-group'>
-                <li className='list-group-item list-group-item-action'>
-                  Name: <span className='fw-bold'>Rajan</span>
-                </li>
-                <li className='list-group-item list-group-item-action'>
-                  Mobile: <span className='fw-bold'>827842948392</span>
-                </li>
-                <li className='list-group-item list-group-item-action'>
-                  Email: <span className='fw-bold'>rajan@gmail.com</span>
-                </li>
-                <li className='list-group-item list-group-item-action'>
-                  Company: <span className='fw-bold'>rajan@gmail.com</span>
-                </li>
-                <li className='list-group-item list-group-item-action'>
-                  Title: <span className='fw-bold'>rajan@gmail.com</span>
-                </li>
-                <li className='list-group-item list-group-item-action'>
-                  Group: <span className='fw-bold'>rajan@gmail.com</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className='row'>
-            <div className='col'>
-              <Link to={'/contacts/list'} className='btn btn-warning'>
-                Back
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {loading ? <Spinner /> : Object.keys(contact).length > 0 && <ViewContactItem key={contact.id} contact={contact} />}
     </>
   );
 };

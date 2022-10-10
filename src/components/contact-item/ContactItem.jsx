@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export const ListItem = ({ contact }) => {
+export const ContactItem = ({ contact }) => {
   const { company, email, groupId, id, mobile, name, photo, title } = contact;
   return (
     <>
       <div className='col-md-6'>
-        <div className='card'>
+        <div className='card my-2'>
           <div className='card-body'>
             <div className='row d-flex align-items-center justify-content-around'>
               <div className='col-md-4'>
