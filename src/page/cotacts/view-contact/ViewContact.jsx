@@ -10,18 +10,22 @@ export const ViewContact = () => {
     loading: true,
     contact: [],
     errorMessage: '',
+    group: {},
   });
 
   const getContact = async () => {
     try {
-      // setState({ ...state, loading: true });
       let response = await apiRequest({
         url: `/contacts/${contactId}`,
+      });
+      let group = await apiRequest({
+        url: `/groups/${response.groupId}`,
       });
       setState({
         ...state,
         loading: false,
         contact: response,
+        group,
       });
     } catch (error) {
       setState({
@@ -36,7 +40,7 @@ export const ViewContact = () => {
     getContact();
   }, []);
 
-  let { loading, contact, errorMessage } = state;
+  let { loading, contact, group, errorMessage } = state;
 
   return (
     <>
@@ -53,7 +57,7 @@ export const ViewContact = () => {
           </div>
         </div>
       </section>
-      {loading ? <Spinner /> : Object.keys(contact).length > 0 && <ViewContactItem key={contact.id} contact={contact} />}
+      {loading ? <Spinner /> : Object.keys(contact).length > 0 && Object.keys(group).length > 0 && <ViewContactItem key={contact.id} contact={contact} group={group} />}
     </>
   );
 };

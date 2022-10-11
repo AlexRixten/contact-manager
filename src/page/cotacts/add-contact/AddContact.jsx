@@ -1,7 +1,59 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+// import { ErrorMessage } from '@hookform/error-message';
+import { useForm } from 'react-hook-form';
+import { apiRequest } from '../../../api/api';
 
 export const AddContact = () => {
+  const navigate = useNavigate();
+  const [group, setGroup] = useState([]);
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    criteriaMode: 'all',
+  });
+
+  const getGroup = async () => {
+    try {
+      let response = await apiRequest({
+        url: '/groups',
+      });
+      setGroup(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getGroup();
+  }, []);
+
+  const createContact = async (data) => {
+    try {
+      const { nameValue, photoUrlValue, mobileValue, emailValue, companyValue, titleValue, groupId } = data;
+      const response = await apiRequest({
+        type: 'POST',
+        url: '/contacts',
+        postData: {
+          company: companyValue,
+          email: emailValue,
+          groupId: groupId,
+          mobile: mobileValue,
+          name: nameValue,
+          photo: photoUrlValue,
+          title: titleValue,
+        },
+      });
+      if (response) {
+        navigate('/contacts/list', { replace: true });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <section className='add-contact p-3'>
@@ -17,28 +69,39 @@ export const AddContact = () => {
           </div>
           <div className='row'>
             <div className='col-md-6'>
-              <form>
+              <form onSubmit={handleSubmit(createContact)}>
                 <div className='mb-2'>
-                  <input type='text' className='form-control' placeholder='Name' />
+                  <input type='text' className='form-control' placeholder='Name' {...register('nameValue', { required: true })} aria-invalid={errors.nameValue ? 'true' : 'false'} />
+                  {errors.nameValue?.type === 'required' && <p role='alert'>Name is required</p>}
                 </div>
                 <div className='mb-2'>
-                  <input type='text' className='form-control' placeholder='Photo Url ' />
+                  <input type='text' className='form-control' placeholder='Photo Url' {...register('photoUrlValue', { required: true })} aria-invalid={errors.photoUrlValue ? 'true' : 'false'} />
+                  {errors.photoUrlValue?.type === 'required' && <p role='alert'>Name is required</p>}
                 </div>
                 <div className='mb-2'>
-                  <input type='number' className='form-control' placeholder='Mobile' />
+                  <input type='number' className='form-control' placeholder='Mobile' {...register('mobileValue', { required: true })} aria-invalid={errors.mobileValue ? 'true' : 'false'} />
+                  {errors.mobileValue?.type === 'required' && <p role='alert'>Name is required</p>}
                 </div>
                 <div className='mb-2'>
-                  <input type='email' className='form-control' placeholder='Email' />
+                  <input type='email' className='form-control' placeholder='Email' {...register('emailValue', { required: true })} aria-invalid={errors.emailValue ? 'true' : 'false'} />
+                  {errors.emailValue?.type === 'required' && <p role='alert'>Name is required</p>}
                 </div>
                 <div className='mb-2'>
-                  <input type='text' className='form-control' placeholder='Company' />
+                  <input type='text' className='form-control' placeholder='Company' {...register('companyValue', { required: true })} aria-invalid={errors.companyValue ? 'true' : 'false'} />
+                  {errors.companyValue?.type === 'required' && <p role='alert'>Name is required</p>}
                 </div>
                 <div className='mb-2'>
-                  <input type='text' className='form-control' placeholder='Title' />
+                  <input type='text' className='form-control' placeholder='Title' {...register('titleValue', { required: true })} aria-invalid={errors.titleValue ? 'true' : 'false'} />
+                  {errors.titleValue?.type === 'required' && <p role='alert'>Name is required</p>}
                 </div>
                 <div className='mb-2'>
-                  <select className='form-control'>
-                    <option value=''>Select a Group</option>
+                  <select className='form-control' {...register('groupId')}>
+                    {/* <option value=''>Select a Group</option> */}
+                    {group?.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className='mb-2'>

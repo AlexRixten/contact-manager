@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export const ViewContactItem = ({ contact }) => {
+export const ViewContactItem = ({ contact, group }) => {
   const { company, email, groupId, id, mobile, name, photo, title } = contact;
 
   return (
@@ -29,7 +29,7 @@ export const ViewContactItem = ({ contact }) => {
                 Title: <span className='fw-bold'>{title}</span>
               </li>
               <li className='list-group-item list-group-item-action'>
-                Group: <span className='fw-bold'>{groupId}</span>
+                Group: <span className='fw-bold'>{group.name}</span>
               </li>
             </ul>
           </div>
