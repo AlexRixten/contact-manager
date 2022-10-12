@@ -1,14 +1,12 @@
 import React from 'react';
-import { useQuery } from 'react-query';
+import { queryClient } from '../../../index';
 import { Link } from 'react-router-dom';
-import { fetchContacts } from '../../../api/contacts';
 import { ContactItem } from '../../../components/contact-item/ContactItem';
 import { Search } from '../../../components/search/Search';
-import { Spinner } from '../../../components/spinner/Spinner';
 
 export const ContactList = () => {
-  const { data, isLoading, error } = useQuery('contacts', fetchContacts);
-  console.log('error', error);
+  const contacts = queryClient.getQueryData(['contacts']);
+  // const groups = queryClient.getQueryData(['groups']);
 
   return (
     <>
@@ -32,7 +30,11 @@ export const ContactList = () => {
       </section>
       <section className='contact-list'>
         <div className='container'>
-          <div className='row'>{isLoading ? <Spinner /> : data.length > 0 && data.map((contact) => <ContactItem key={contact.id} contact={contact} />)}</div>
+          <div className='row'>
+            {contacts?.map((contact) => (
+              <ContactItem key={contact.id} contact={contact} />
+            ))}
+          </div>
         </div>
       </section>
     </>
