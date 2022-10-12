@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { queryClient } from '../../../index';
 import { Link, useNavigate } from 'react-router-dom';
 // import { ErrorMessage } from '@hookform/error-message';
 import { useForm } from 'react-hook-form';
@@ -6,7 +7,6 @@ import { apiRequest } from '../../../api/api';
 
 export const AddContact = () => {
   const navigate = useNavigate();
-  const [group, setGroup] = useState([]);
   const {
     register,
     formState: { errors },
@@ -14,21 +14,7 @@ export const AddContact = () => {
   } = useForm({
     criteriaMode: 'all',
   });
-
-  const getGroup = async () => {
-    try {
-      let response = await apiRequest({
-        url: '/groups',
-      });
-      setGroup(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getGroup();
-  }, []);
+  const groups = queryClient.getQueryData(['groups']);
 
   const createContact = async (data) => {
     try {
@@ -61,10 +47,7 @@ export const AddContact = () => {
           <div className='row'>
             <div className='col'>
               <p className='h4 text-success fw-bold'>Create Contact</p>
-              <p className='fst-italic'>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolores totam incidunt reprehenderit quas ullam consectetur, obcaecati optio modi perspiciatis earum facere dolorem fugit. Veniam sed beatae commodi corporis, perspiciatis
-                reprehenderit.
-              </p>
+              <p className='fst-italic'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolores totam incidunt reprehenderit quas ullam consectetur, obcaecati optio modi perspiciatis earum facere dolorem fugit. Veniam sed beatae commodi corporis, perspiciatis reprehenderit.</p>
             </div>
           </div>
           <div className='row'>
@@ -97,7 +80,7 @@ export const AddContact = () => {
                 <div className='mb-2'>
                   <select className='form-control' {...register('groupId')}>
                     {/* <option value=''>Select a Group</option> */}
-                    {group?.map((item) => (
+                    {groups?.map((item) => (
                       <option key={item.id} value={item.id}>
                         {item.name}
                       </option>
