@@ -4,13 +4,20 @@ import { queryClient } from '../../../index';
 import { useParams } from 'react-router-dom';
 import { Spinner } from '../../../components/spinner/Spinner';
 import { ViewContactItem } from '../../../components/view-contact-item/ViewContactItem';
-import { viewContact } from '../../../api/contacts';
+import { viewContact, getGroupItem } from '../../../api/contacts';
 
 export const ViewContact = () => {
   const { contactId } = useParams();
 
-  const { data, isLoading } = useQuery(['contact'], () => viewContact(contactId));
-  const groups = queryClient.getQueryData(['groups']);
+  const { data: contact, isLoading } = useQuery(['contact', contactId], () => viewContact(contactId), {
+    enabled: !!contactId,
+  });
+
+  const contactGroupId = contact?.groupId;
+
+  const { isSuccess, data: groupItem } = useQuery(['groupItem', contactGroupId], () => getGroupItem(contactGroupId), {
+    enabled: !!contactGroupId,
+  });
 
   return (
     <>
@@ -24,7 +31,7 @@ export const ViewContact = () => {
           </div>
         </div>
       </section>
-      {isLoading ? <Spinner /> : Object.keys(data).length > 0 && Object.keys(groups).length > 0 && <ViewContactItem key={data.id} contact={data} group={groups} />}
+      {isLoading ? <Spinner /> : Object.keys(contact).length > 0 && isSuccess && <ViewContactItem key={contact.id} contact={contact} group={groupItem} />}
     </>
   );
 };

@@ -14,6 +14,13 @@ export const fetchGroups = async () => {
   return response;
 };
 
+export const getGroupItem = async (id) => {
+  const response = await apiRequest({
+    url: `/groups/${id}`,
+  });
+  return response;
+};
+
 export const createContact = async (params) => {
   const response = await apiRequest({
     type: 'POST',
