@@ -1,4 +1,3 @@
-import React from "react";
 import { queryClient } from "../../../index";
 import { Link } from "react-router-dom";
 import { ContactItem } from "../../../components/contact-item/ContactItem";

@@ -1,6 +1,11 @@
-import React from "react";
+import { useState } from "react";
+import { queryClient } from "../../index";
 
 export const Search = () => {
+  const [search, setSearch] = useState("");
+
+  const contacts = queryClient.getQueryData(["contacts"]);
+
   return (
     <div className="contact-search">
       <div className="container">
@@ -19,9 +24,10 @@ export const Search = () => {
               <div className="col">
                 <div className="mb-2">
                   <input
-                    type="submit"
                     className="btn btn-outline-dark"
-                    value="Search"
+                    placeholder="Search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
                   />
                 </div>
               </div>
