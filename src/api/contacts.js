@@ -25,7 +25,15 @@ export const createContact = async (params) => {
   const response = await apiRequest({
     type: 'POST',
     url: '/contacts',
-    postData: params,
+    postData: {
+      company: params.companyValue,
+      email: params.emailValue,
+      groupId: params.groupId,
+      mobile: params.mobileValue,
+      name: params.nameValue,
+      photo: params.photoUrlValue,
+      title: params.titleValue,
+    },
   });
   return response;
 };
@@ -41,7 +49,14 @@ export const updateContact = async (id, params) => {
   const response = await apiRequest({
     type: 'PATCH',
     url: `/contacts/${id}`,
-    postData: params,
+    postData: {
+      company: params.companyValue,
+      email: params.emailValue,
+      groupId: params.groupId,
+      mobile: params.mobileValue,
+      name: params.nameValue,
+      title: params.titleValue,
+    },
   });
   return response;
 };

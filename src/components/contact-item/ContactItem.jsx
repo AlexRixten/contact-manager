@@ -1,17 +1,18 @@
 import React from 'react';
+import { queryClient } from '../../index';
+import { useMutation } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { apiRequest } from '../../api/api';
+import { deleteContact } from '../../api/contacts';
 
 export const ContactItem = ({ contact }) => {
   const { company, email, groupId, id, mobile, name, photo, title } = contact;
 
-  const deleteContact = async () => {
-    const response = apiRequest({
-      type: 'DELETE',
-      url: `/contacts/${id}`,
-    });
-    return response;
-  };
+  const mutation = useMutation(deleteContact, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('contacts');
+    },
+  });
+
   return (
     <>
       <div className='col-md-6'>
@@ -41,7 +42,12 @@ export const ContactItem = ({ contact }) => {
                 <Link to={`/contacts/edit/${id}`} className='btn btn-primary my-1'>
                   <i className='fa fa-pen' />
                 </Link>
-                <button onClick={deleteContact} className='btn btn-danger my-1'>
+                <button
+                  onClick={() => {
+                    mutation.mutate(id);
+                  }}
+                  className='btn btn-danger my-1'
+                >
                   <i className='fa fa-trash' />
                 </button>
               </div>
