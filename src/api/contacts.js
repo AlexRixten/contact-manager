@@ -7,6 +7,23 @@ export const fetchContacts = async () => {
   return response;
 };
 
+export const searchContacts = async (value) => {
+  if (value) {
+    const response = await apiRequest({
+      url: "/contacts",
+    });
+    return response.filter((contact) => {
+      return contact.name.toLowerCase().includes(value.toLowerCase());
+    });
+  }
+  // if (value == "") {
+  //   const response = await apiRequest({
+  //     url: "/contacts",
+  //   });
+  //   return response;
+  // }
+};
+
 export const fetchGroups = async () => {
   const response = await apiRequest({
     url: "/groups",
