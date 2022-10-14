@@ -6,6 +6,8 @@ import { viewContact, updateContact } from "../../../api/contacts";
 import { Spinner } from "../../../components/spinner/Spinner";
 
 export const EditContact = () => {
+  const groups = queryClient.getQueryData(["groups"]);
+
   const navigate = useNavigate();
   const { contactId } = useParams();
 
@@ -22,11 +24,9 @@ export const EditContact = () => {
     handleSubmit,
   } = useForm();
 
-  const groups = queryClient.getQueryData(["groups"]);
-
   const { mutate } = useMutation((values) => updateContact(contactId, values), {
     onSuccess: () => {
-      queryClient.invalidateQueries(["contacts"]);
+      queryClient.invalidateQueries();
       queryClient.invalidateQueries(["contact", contactId]);
       navigate("/contacts/list", { replace: true });
     },
