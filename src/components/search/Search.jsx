@@ -8,7 +8,7 @@ export const Search = () => {
 
   const { mutate } = useMutation((values) => searchContacts(values), {
     onSuccess: () => {
-      queryClient.invalidateQueries("contacts");
+      return queryClient.invalidateQueries(["contacts"]);
     },
   });
 
