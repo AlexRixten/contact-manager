@@ -7,16 +7,14 @@ export const Search = () => {
   const [search, setSearch] = useState("");
 
   const { mutate } = useMutation((values) => searchContacts(values), {
-    onSuccess: () => {
-      return queryClient.invalidateQueries(["contacts"]);
+    onSuccess: (values) => {
+      return queryClient.setQueryData(["contacts"], () => [...values]);
     },
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("search =", search);
     mutate(search);
-    setSearch("");
   };
 
   return (

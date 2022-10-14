@@ -1,12 +1,16 @@
-import { queryClient } from "../../../index";
 import { Link } from "react-router-dom";
 import { ContactItem } from "../../../components/contact-item/ContactItem";
 import { Search } from "../../../components/search/Search";
+import { useQuery } from "@tanstack/react-query";
+import { fetchContacts } from "../../../api/contacts";
+import { Spinner } from "../../../components/spinner/Spinner";
 
 export const ContactList = () => {
-  const contacts = queryClient.getQueryData(["contacts"]);
-  // const groups = queryClient.getQueryData(['groups']);
+  const { data: contacts, isLoading } = useQuery(["contacts"], fetchContacts);
 
+  if (isLoading) {
+    return <Spinner />;
+  }
   return (
     <>
       <section className="contact-search p-5">

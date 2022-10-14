@@ -1,7 +1,6 @@
 import { apiRequest } from "./api";
 
 export const fetchContacts = async () => {
-  console.log("apiFetchContact");
   const response = await apiRequest({
     url: "/contacts",
   });
@@ -9,20 +8,14 @@ export const fetchContacts = async () => {
 };
 
 export const searchContacts = async (value) => {
-  console.log("apiSearchContacts");
-  console.log("value", value);
-  const response = await apiRequest({
-    url: "/contacts",
-  });
-  if (typeof value == "string" && value !== "") {
-    const serachContacts = response.filter((contact) => {
-      return contact.name.toLowerCase().includes(value.toLowerCase());
-    });
-    console.log("serachContacts", serachContacts);
-    return serachContacts;
-  } else {
-    return response;
+  let searchParams = "";
+  if (value) {
+    searchParams = `?name_like=${value}`;
   }
+  const response = await apiRequest({
+    url: `/contacts${searchParams}`,
+  });
+  return response;
 };
 
 export const fetchGroups = async () => {
