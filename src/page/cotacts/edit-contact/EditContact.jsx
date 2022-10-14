@@ -9,8 +9,12 @@ export const EditContact = () => {
   const navigate = useNavigate();
   const { contactId } = useParams();
 
-  const { data: contact, isSuccess } = useQuery(["contact", contactId], () =>
-    viewContact(contactId)
+  const { data: contact, isSuccess } = useQuery(
+    ["contact", contactId],
+    () => viewContact(contactId),
+    {
+      enabled: !!contactId,
+    }
   );
   const {
     register,

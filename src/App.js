@@ -6,13 +6,16 @@ import { AddContact } from "./page/cotacts/add-contact/AddContact";
 import { ViewContact } from "./page/cotacts/view-contact/ViewContact";
 import { EditContact } from "./page/cotacts/edit-contact/EditContact";
 import { ContactList } from "./page/cotacts/contact-list/ContactList";
-import { fetchGroups } from "./api/contacts";
+import { fetchContacts, fetchGroups } from "./api/contacts";
 import "./App.css";
 import { NotFound } from "./page/not-found/NotFound";
 
 function App() {
-  const result = useQueries({
-    queries: [{ queryFn: fetchGroups, queryKey: ["groups"] }],
+  useQueries({
+    queries: [
+      { queryFn: fetchContacts, queryKey: ["contacts"] },
+      { queryFn: fetchGroups, queryKey: ["groups"] },
+    ],
   });
   return (
     <div className="App">
