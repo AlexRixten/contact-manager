@@ -1,0 +1,16 @@
+.wrapper{
+    margin-top: 20px;
+}
+
+.label{
+    position: relative;
+}
+.closeBtn{
+    position: absolute;
+    top: 2px;
+    right: 3px;
+    border: none;
+    background: transparent;
+    font-weight: 900;
+    font-size: 20px;
+}
